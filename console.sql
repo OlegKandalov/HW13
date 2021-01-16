@@ -13,29 +13,31 @@ INSERT INTO pilot (pilot_name_surname, pilot_age) VALUES
 ('Randy Faction', 33),
 ('Tim Kendal', 32);
 
+CREATE TABLE if not exists model
+(
+    id SERIAL,
+    plane_model TEXT UNIQUE,
+    PRIMARY KEY (id)
+);
+
+INSERT INTO model (plane_model) VALUES
+('Bowing 747'),
+('Tu-134'),
+('Kukuruza');
+
 CREATE TABLE if not exists plane
 (
     id SERIAL PRIMARY KEY,
-    plane_model VARCHAR(255) NOT NULL,
+    plane_model TEXT NOT NULL,
     plane_serial_number TEXT NOT NULL UNIQUE,
-    plane_number_sid INT NOT NULL
+    plane_number_sid INT NOT NULL,
+    FOREIGN KEY (plane_model) REFERENCES model (plane_model)
 );
 
 INSERT INTO plane (plane_model, plane_serial_number, plane_number_sid) VALUES
 ('Bowing 747', '40-23', 350),
 ('Tu-134', '3234-g', 120),
 ('Kukuruza', '113', 25);
-
-CREATE TABLE if not exists model_serial_number
-(
-    id serial PRIMARY KEY,
-    serial_num text UNIQUE
-);
-
-INSERT INTO model_serial_number (serial_num) VALUES
-('40-23'),
-('3234-g'),
-('113');
 
 CREATE TABLE if not exists pilot_can
 (
@@ -47,7 +49,7 @@ CREATE TABLE if not exists pilot_can
             REFERENCES pilot (id),
     CONSTRAINT pilot_airplane_model
         FOREIGN KEY (plane_serial)
-            REFERENCES model_serial_number (id)
+            REFERENCES model (id)
 );
 
 INSERT INTO pilot_can (pilot_num, plane_serial) VALUES
